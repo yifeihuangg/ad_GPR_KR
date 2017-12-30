@@ -118,6 +118,7 @@ def find_neighbouring(i, p, N):
     if (i != N - p) and (i != N - 1) and (i != 0) and (i != p - 1):
         # if at upper edge but not vertex
         if i >= N - p:
+            print'upper edge'
             up = i % p
             upleft = (i-1) % p
             upright = (i+1) % p
@@ -128,6 +129,7 @@ def find_neighbouring(i, p, N):
             downleft = i - p - 1
         # if at lower edge but not vertex
         elif i < p:
+            print'lower edge'
             up = i + p
             upleft = i + p - 1
             upright = i + p + 1
@@ -138,6 +140,7 @@ def find_neighbouring(i, p, N):
             downleft = N - (p - i + 1)
         # if at left edge but not vertex
         elif i % p == 0:
+            print'left edge'
             up = i + p
             upleft = i + (2 * p - 1)
             upright = i + p + 1
@@ -147,7 +150,8 @@ def find_neighbouring(i, p, N):
             downright = i - p + 1
             downleft = i - 1
         # if at right edge but not vertex
-        elif i % p == 1:
+        elif i % p == 4:
+            print'right edge'
             up = i + p
             upleft = i + p - 1
             upright = i + 1
@@ -158,6 +162,7 @@ def find_neighbouring(i, p, N):
             downleft = i - p - 1
         # if in the middle
         else:
+            print'middle'
             up = i + p
             upleft = i + p - 1
             upright = i + p + 1
@@ -172,6 +177,7 @@ def find_neighbouring(i, p, N):
     else:
         # upperleft vertex
         if (i >= (N - p)) and (i % p == 0):
+            print'upleft vertex'
             up = i % p
             upleft = (i - 1) % p
             upright = (i + 1) % p
@@ -181,7 +187,8 @@ def find_neighbouring(i, p, N):
             downright = i - p + 1
             downleft = i - 1
         # upperright vertex
-        elif (i >=(N - p))and(i % p == 1):
+        elif (i >=(N - p))and(i % p == 4):
+            print'upright vertex'
             up = i % p
             upleft = (i - 1) % p
             upright = (i + 1) % p
@@ -192,6 +199,7 @@ def find_neighbouring(i, p, N):
             downleft = i - p - 1
         # lowerleft vertex
         elif (i < p)and(i % p == 0):
+            print'lowerleft vertex'
             up = i + p
             upleft = i + (2*p - 1)
             upright = i + p + 1
@@ -199,23 +207,25 @@ def find_neighbouring(i, p, N):
             right = i + 1
             down = N - (p - i)
             downright = N - (p - (i + 1))
-            downleft = N - (p - (i - 1))
+            downleft = N - 1
 
         # lowerright vertex
-        elif (i < p)and(i % p == 1):
+        elif (i < p)and(i % p == 4):
+            print'lowerright vertex'
             up = i + p
             upleft = i + p - 1
             upright = i + 1
             left = i - 1
             right = i - (p - 1)
             down = N - (p - i)
-            downright = N - (p - (i + 1))
+            downright = N - p
             downleft = N - (p - (i - 1))
 
     # put all indexes into neighbour_index
     neighbour_index = np.array([up, upleft, upright, left, right, down, downright, downleft, i])
 
     return neighbour_index
+
 
 def find_datapoint_in_block(xrange, yrange, n_bin, n_block, trajs, p):
     """
