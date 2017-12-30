@@ -1,7 +1,7 @@
 import numpy as np
 import kernel_regression as kr
 from sklearn.gaussian_process import GaussianProcessRegressor
-from sklearn.gaussian_process.kernels import RBF, WhiteKernel, ConstantKernel as C
+from sklearn.gaussian_process.kernels import ExpSineSquared, WhiteKernel, ConstantKernel as C
 from math import floor
 
 
@@ -83,7 +83,7 @@ def get_D_GPR(trajs, pos, subsampling=1, dt=0.001):
             y = y_trajs.flatten()
 
             # Construct the GPR kernel
-            kernel = C(1.0) * RBF(length_scale=1.0) + WhiteKernel(noise_level=np.var(y), noise_level_bounds='fixed')
+            kernel = C(1.0) * ExpSineSquared(length_scale = 1.0, periodicity = 2*np.pi) + WhiteKernel(noise_level=np.var(y), noise_level_bounds='fixed')
             # Fit the Gaussian process, predict D
             GP = GaussianProcessRegressor(alpha=0.0,kernel=kernel,normalize_y=True)
             # print 'x shape', np.shape(x)
@@ -283,7 +283,7 @@ def main():
 
     trajs = np.array([trajs[neighbouring_window_index[0]],trajs[neighbouring_window_index[1]],trajs[neighbouring_window_index[2]],trajs[neighbouring_window_index[3]],trajs[neighbouring_window_index[4]],trajs[neighbouring_window_index[5]],trajs[neighbouring_window_index[6]],trajs[neighbouring_window_index[7]],trajs[neighbouring_window_index[8]]])
 
-    center = np.load('center.npy')
+    center = np.load('centers.npy')
     pos = center[block_region-1]
 
     print("KR estimation...")
