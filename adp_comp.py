@@ -83,7 +83,7 @@ def get_D_GPR(trajs, pos, subsampling=1, dt=0.001):
             y = y_trajs.flatten()
 
             # Construct the GPR kernel
-            kernel = C(1.0) * ExpSineSquared(length_scale = 1.0, periodicity = 2*np.pi) + WhiteKernel(noise_level=np.var(y), noise_level_bounds='fixed')
+            kernel = C(1.0) * ExpSineSquared(length_scale = 1.0, periodicity = 2*np.pi) * RBF(length_scale=1.0) + WhiteKernel(noise_level=np.var(y), noise_level_bounds='fixed')
             # Fit the Gaussian process, predict D
             GP = GaussianProcessRegressor(alpha=0.0,kernel=kernel,normalize_y=True)
             # print 'x shape', np.shape(x)
