@@ -290,10 +290,14 @@ def main():
     D_KR = get_D_KR(trajs,pos,subsampling,dt)
     print("GPR estimation...")
     D_GPR = get_D_GPR(trajs, pos, subsampling, dt)
+    
+    print'D_KR%d'%(block_region-1), D_KR
+    print'D_GPR%d'%(block_region-1), D_GPR
+    
 
 
-    np.save('D_KR%d'%block_region, D_KR)
-    np.save('D_GPR%d'%block_region, D_GPR)
+    np.save('D_KR%d'%(block_region-1), D_KR)
+    np.save('D_GPR%d'%(block_region-1), D_GPR)
 
     return
 
