@@ -1,7 +1,7 @@
 import numpy as np
 import kernel_regression as kr
 from sklearn.gaussian_process import GaussianProcessRegressor
-from sklearn.gaussian_process.kernels import ExpSineSquared, WhiteKernel, ConstantKernel as C
+from sklearn.gaussian_process.kernels import RBF, ExpSineSquared, WhiteKernel, ConstantKernel as C
 
 
 
