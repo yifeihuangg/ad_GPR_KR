@@ -2,7 +2,7 @@ import numpy as np
 import kernel_regression as kr
 from sklearn.gaussian_process import GaussianProcessRegressor
 from sklearn.gaussian_process.kernels import ExpSineSquared, WhiteKernel, ConstantKernel as C
-from math import floor
+
 
 
 def get_D_KR(trajs, pos, subsampling=1, dt=0.001):
@@ -236,11 +236,12 @@ def main():
     block_region = 1
     kT = 0.616033281788
     dt = 0.001
-    subsampling = 1
+    subsampling = 10
 
     neighbouring_window_index = find_neighbouring(block_region-1, num_umbrella, num_umbrella**2)
 
     trajs = np.array([trajs[neighbouring_window_index[0]],trajs[neighbouring_window_index[1]],trajs[neighbouring_window_index[2]],trajs[neighbouring_window_index[3]],trajs[neighbouring_window_index[4]],trajs[neighbouring_window_index[5]],trajs[neighbouring_window_index[6]],trajs[neighbouring_window_index[7]],trajs[neighbouring_window_index[8]]])
+    trajs = trajs[::subsampling]
 
     center = np.load('centers.npy')
     pos = center[block_region-1]
@@ -249,10 +250,10 @@ def main():
     D_KR = get_D_KR(trajs,pos,subsampling,dt)
     print("GPR estimation...")
     D_GPR = get_D_GPR(trajs, pos, subsampling, dt)
-    
+
     print'D_KR%d'%(block_region-1), D_KR
     print'D_GPR%d'%(block_region-1), D_GPR
-    
+
 
 
     np.save('D_KR%d'%(block_region-1), D_KR)
