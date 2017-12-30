@@ -1,9 +1,5 @@
 import numpy as np
-import matplotlib.pyplot as plt
 import kernel_regression as kr
-from numpy import linalg as LA
-from mpl_toolkits.mplot3d import Axes3D
-from matplotlib import cm
 from sklearn.gaussian_process import GaussianProcessRegressor
 from sklearn.gaussian_process.kernels import RBF, WhiteKernel, ConstantKernel as C
 from math import floor
@@ -119,8 +115,7 @@ def find_neighbouring(i, p, N):
     """
     neighbour_index = []
     # if not vertex
-    if (i != N - p)&&(i != N - 1)&&(i != 0)&&(i != p - 1):
-
+    if (i != N - p) and (i != N - 1) and (i != 0) and (i != p - 1):
         # if at upper edge but not vertex
         if i >= N - p:
             up = i % p
@@ -176,7 +171,7 @@ def find_neighbouring(i, p, N):
     #if vertex
     else:
         # upperleft vertex
-        if (i >= (N - p)) && (i % p == 0):
+        if (i >= (N - p)) and (i % p == 0):
             up = i % p
             upleft = (i - 1) % p
             upright = (i + 1) % p
@@ -186,7 +181,7 @@ def find_neighbouring(i, p, N):
             downright = i - p + 1
             downleft = i - 1
         # upperright vertex
-        elif (i >=(N - p))&&(i % p == 1):
+        elif (i >=(N - p))and(i % p == 1):
             up = i % p
             upleft = (i - 1) % p
             upright = (i + 1) % p
@@ -196,7 +191,7 @@ def find_neighbouring(i, p, N):
             downright = i - (2*p - 1)
             downleft = i - p - 1
         # lowerleft vertex
-        elif (i < p)&&(i % p == 0):
+        elif (i < p)and(i % p == 0):
             up = i + p
             upleft = i + (2*p - 1)
             upright = i + p + 1
@@ -207,7 +202,7 @@ def find_neighbouring(i, p, N):
             downleft = N - (p - (i - 1))
 
         # lowerright vertex
-        elif (i < p)&&(i % p == 1):
+        elif (i < p)and(i % p == 1):
             up = i + p
             upleft = i + p - 1
             upright = i + 1
@@ -284,7 +279,7 @@ def main():
     dt = 0.001
     subsampling = 1
 
-    neighbouring_window_index = find_neighbouring(block_region-1, num_umbrella, period**2)
+    neighbouring_window_index = find_neighbouring(block_region-1, num_umbrella, num_umbrella**2)
 
     trajs = np.array([trajs[neighbouring_window_index[0]],trajs[neighbouring_window_index[1]],trajs[neighbouring_window_index[2]],trajs[neighbouring_window_index[3]],trajs[neighbouring_window_index[4]],trajs[neighbouring_window_index[5]],trajs[neighbouring_window_index[6]],trajs[neighbouring_window_index[7]],trajs[neighbouring_window_index[8]]])
 
