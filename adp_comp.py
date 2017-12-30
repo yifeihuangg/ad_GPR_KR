@@ -227,57 +227,6 @@ def find_neighbouring(i, p, N):
     return neighbour_index
 
 
-def find_datapoint_in_block(xrange, yrange, n_bin, n_block, trajs, p):
-    """
-    Find all the datapoints in trajs that belong to the n_th block.
-
-    Parameters
-    ----------
-    xrange : list
-        xrange[0] is the minimum of x axis, xrange[1] is the maximum of x axis.
-    yrange: list
-        yrange[0] is the minimum of y axis, yrange[1] is the maximum of y axis.
-    n_bin: int
-        the number of bins along x and y axis.
-    n_block: int
-        n_block is the n_th block you want to calculate its diffusion coefficient.
-    trajs: list
-        the list of trajectories. each row is a trajectory.
-    p: float
-        the repetition period of the system.
-
-    Returns
-    -------
-    x_new: 2 by 1 array
-        the coordinates of datapoints that belong to n_th block.
-
-    z_new: 2 by 2 array
-        corresponding x_(i+1) - x_(i) calculated.
-    """
-    # calculate the n_th block's coordinate range
-    x_new = []
-    z_new = []
-    x_min = xrange[0]
-    x_max = xrange[1]
-    y_min = yrange[0]
-    y_max = yrange[1]
-
-    x_width = (x_max - x_min)/n_bin
-    y_width = (y_max - y_min)/n_bin
-    neighbour_index = find_neighbouring(n_block, p, n_bin**2)
-
-    for traj in trajs:
-        for i in xrange(len(traj)-1):
-            for index in neighbour_index:
-                r = (index+1)%p
-                c = floor(index/p)+1
-                if ((r-1)*x_width) <= traj[i][0] < (r*x_width):
-                    if ((c-1)*y_width) <= traj[i][1] < (c*y_width):
-                        x_new.append(traj[i])
-                        z = np.array([[((traj[i+1][0]-traj[i][0])*(traj[i+1][0]-traj[i][0])),((traj[i+1][0]-traj[i][0])*(traj[i+1][1]-traj[i][1]))], [((traj[i+1][1]-traj[i][1])*(traj[i+1][0]-traj[i][0])),((traj[i+1][1]-traj[i][1])*(traj[i+1][1]-traj[i][1]))]])
-                        z_new.append(z)
-
-    return x_new, z_new
 
 
 def main():
