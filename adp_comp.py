@@ -258,7 +258,7 @@ def main():
     trajs = trajs[::subsampling]
 
     center = np.load('centers.npy')
-    pos = np.transpose(np.array(center[block_region-1]))
+    pos = np.array(center[block_region-1])
     print 'pos shape', np.shape(pos)
 
     print("KR estimation...")
