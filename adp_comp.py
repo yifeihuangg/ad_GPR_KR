@@ -27,7 +27,12 @@ def get_D_KR(trajs, pos, subsampling=1, dt=0.001):
     kernel = kr.KernelRegression(kernel="rbf", gamma=np.logspace(-2, 2, 10))
     dim = np.size(trajs[0][0])
     print('KR Dimension is %d' %(dim))
-    D_kr = np.zeros([dim,dim,len(pos)])
+
+    if np.shape(pos) == (2,): # if position is one data point coordinate
+        D_kr = np.zeros([dim,dim])
+    else:
+        D_kr = np.zeros([dim,dim,len(pos)])
+
     for i in xrange(dim):
         for j in xrange(dim):
             y_trajs = np.zeros([len(trajs), len(trajs[0])-1])
@@ -39,8 +44,11 @@ def get_D_KR(trajs, pos, subsampling=1, dt=0.001):
 
             x = x_trajs.reshape(len(trajs)*(len(trajs[0])-1),dim)
             y = y_trajs.flatten()
+            print'x shape', np.shape(x)
+            print'y shape', np.shape(y)
             model = kernel.fit(x,y)
             D_kr[i][j] = (model.predict(pos))/(dt*2*subsampling)
+            print'D_kr[%d][%d] shape'%(i,j), np.shape(D_kr[i][j])
 
     return D_kr
 
@@ -68,7 +76,12 @@ def get_D_GPR(trajs, pos, subsampling=1, dt=0.001):
 
     dim = np.size(trajs[0][0])
     print('GPR Dimension is %d' %(dim))
-    D_gpr = np.zeros([dim,dim,len(pos)])
+
+    if np.shape(pos) == (2,): # if position is one data point coordinate
+        D_gpr = np.zeros([dim,dim])
+    else:
+        D_gpr = np.zeros([dim,dim,len(pos)])
+
     D_gpr_cov = np.zeros([dim, dim, len(pos), len(pos)])
     for i in xrange(dim):
         for j in xrange(dim):
@@ -86,11 +99,12 @@ def get_D_GPR(trajs, pos, subsampling=1, dt=0.001):
             kernel = C(1.0) * ExpSineSquared(length_scale = 1.0, periodicity = 2*np.pi) * RBF(length_scale=1.0) + WhiteKernel(noise_level=np.var(y), noise_level_bounds='fixed')
             # Fit the Gaussian process, predict D
             GP = GaussianProcessRegressor(alpha=0.0,kernel=kernel,normalize_y=True)
-            # print 'x shape', np.shape(x)
-            # print 'y shape', np.shape(y)
+            print 'x shape', np.shape(x)
+            print 'y shape', np.shape(y)
             GP.fit(x,y)
             D_gpr[i][j], D_gpr_cov[i][j]  = GP.predict(pos, return_cov=True)
             D_gpr[i][j]/=(dt*2*subsampling)
+            print'D_gpr[%d][%d] shape'%(i,j), np.shape(D_gpr[i][j])
 
     return D_gpr
 
@@ -244,7 +258,8 @@ def main():
     trajs = trajs[::subsampling]
 
     center = np.load('centers.npy')
-    pos = center[block_region-1]
+    pos = np.transpose(np.array(center[block_region-1]))
+    print 'pos shape', np.shape(pos)
 
     print("KR estimation...")
     D_KR = get_D_KR(trajs,pos,subsampling,dt)
